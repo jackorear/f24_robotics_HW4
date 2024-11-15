@@ -6,6 +6,7 @@ from geometry_msgs.msg import Twist
 # import the LaserScan module from sensor_msgs interface
 from sensor_msgs.msg import LaserScan
 from nav_msgs.msg import Odometry
+from apriltag_ros_msgs.msg import AprilTagDetectionArray
 # import Quality of Service library, to set the correct profile and reliability in order to read sensor data.
 from rclpy.qos import ReliabilityPolicy, QoSProfile
 import math
@@ -44,6 +45,12 @@ class RandomWalk(Node):
             '/odom',
             self.listener_callback2,
             QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT))
+        self.apriltag_subscriber = self.create_subscription(
+            AprilTagDetectionArray,
+            '/apriltag_detections',
+            self.apriltag_callback,
+            10
+        )
         self.laser_forward = 0
         self.odom_data = 0
         self.pose_saved = ''
@@ -54,8 +61,20 @@ class RandomWalk(Node):
         self.start_x = 0.0
         self.start_y = 0.0
         self.distance_from_start = 0.0  # Track distance from start
+        self.tag_detected = False
+        self.tag_pose = None
         # Open a file for writing the position
         self.position_file = open('position.txt', 'w')
+
+    def apriltag_callback(self, msg):
+        """Callback for AprilTag detections."""
+        if msg.detections:
+            self.tag_detected = True
+            self.tag_pose = msg.detections[0].pose.pose
+            self.get_logger().info(f"AprilTag detected with ID: {msg.detections[0].id}")
+        else:
+            self.tag_detected = False
+            self.tag_pose = None
 
     def dist_from_start(self, pos):
         """Calculate distance from the starting position."""
@@ -70,22 +89,17 @@ class RandomWalk(Node):
         cosy_cosp = 1 - 2 * (q.y * q.y + q.z * q.z)
         yaw = math.atan2(siny_cosp, cosy_cosp)
         return yaw
-
         
-    def normalize_angle(self,angle):
+    def normalize_angle(self, angle):
         """Normalize the angle to be within [-pi, pi]"""
         return math.atan2(math.sin(angle), math.cos(angle))
         
     def turn_x_deg(self, x):
         x = math.radians(x)
-        if self.orientation == None:
-            self.get_logger().info('Turn x deg called with None for self.current_orientation')
-            return
         turn_duration = (x / ANGULAR_VEL)
         self.cmd.angular.z = ANGULAR_VEL
         self.cmd.linear.x = 0.0
         self.publisher_.publish(self.cmd)
-        self.get_logger().info('Turn x deg called for %f duration (s)' % turn_duration)
         time.sleep(turn_duration)
         self.cmd.angular.z = 0.0
         self.publisher_.publish(self.cmd)
@@ -109,104 +123,64 @@ class RandomWalk(Node):
         return
     
     def listener_callback1(self, msg1):
-        #self.get_logger().info('scan: "%s"' % msg1.ranges)
         scan = msg1.ranges
-        self.scan_cleaned = []
-       
-        #self.get_logger().info('scan: "%s"' % scan)
-        # Assume 360 range measurements
-        for reading in scan:
-            if reading == float('Inf'):
-                self.scan_cleaned.append(3.5)
-            elif math.isnan(reading):
-                self.scan_cleaned.append(0.0)
-            else:
-            	self.scan_cleaned.append(reading)
+        self.scan_cleaned = [
+            reading if reading != float('Inf') else 3.5 for reading in scan
+        ]
             
     def listener_callback2(self, msg2):
-        """Odometry callback to track position and calculate distance from start."""
         position = msg2.pose.pose.position
         self.current_position = (position.x, position.y)
-    
-        # Update distance from start
         self.distance_from_start = self.dist_from_start(self.current_position)
-    
-        # Log the current position and distance from start
         self.get_logger().info('Current position: {}'.format(self.current_position))
         self.get_logger().info('Distance from start: {}'.format(self.distance_from_start))
-    
-        # Set initial position as the start position if it's the first odometry reading
         if self.start_x == 0.0 and self.start_y == 0.0:
             self.start_x = position.x
             self.start_y = position.y
-            self.get_logger().info('Initial position saved as: {}, {}'.format(self.start_x, self.start_y))
-        # Write the current position to the file
         self.position_file.write(f'{position.x}, {position.y}\n')
-        self.position_file.flush()  # Ensure the data is written to the file
+        self.position_file.flush()
            
     def timer_callback(self):
+        if self.tag_detected and self.tag_pose:
+            self.get_logger().info('AprilTag detected. Stopping to process the tag.')
+            self.cmd.linear.x = 0.0
+            self.cmd.angular.z = 0.0
+            self.publisher_.publish(self.cmd)
+            return
+        
         if len(self.scan_cleaned) == 0:
             self.turtlebot_moving = False
             return
         
-        # Get the minimum distance from the laser scans on the front, right, and left
         left_lidar_min = min(self.scan_cleaned[LEFT_SIDE_INDEX:LEFT_FRONT_INDEX])
         right_lidar_min = min(self.scan_cleaned[RIGHT_FRONT_INDEX:RIGHT_SIDE_INDEX])
         front_lidar_min = min(self.scan_cleaned[LEFT_FRONT_INDEX:RIGHT_FRONT_INDEX])
-    
-        # Log the distances for debugging
-        self.get_logger().info('Left side min distance: %f' % left_lidar_min)
-        self.get_logger().info('Front min distance: %f' % front_lidar_min)
-        self.get_logger().info('Right side min distance: %f' % right_lidar_min)
         
-        # If an obstacle is directly in front, turn left to avoid it
         if front_lidar_min < SAFE_STOP_DISTANCE:
-            self.get_logger().info('Obstacle detected ahead, turning left.')
             self.cmd.linear.x = 0.0
-            self.cmd.angular.z = ANGULAR_VEL * .5
-            self.publisher_.publish(self.cmd)
-            return
-    
-        # Follow the right wall
-        if right_lidar_min < WALL_DISTANCE - LIDAR_ERROR:
-            # Too close to the right wall, turn left slightly
-            self.get_logger().info('Too close to right wall, turning left.')
-            self.cmd.angular.z = ANGULAR_VEL * 0.5  # Turn slightly left
-            self.cmd.linear.x = LINEAR_VEL * 0.5    # Slow forward movement
-        elif right_lidar_min > WALL_DISTANCE + LIDAR_ERROR and right_lidar_min < 3 * (WALL_DISTANCE + LIDAR_ERROR):
-            # Too far from the right wall, turn right slightly
-            self.get_logger().info('Too far from right wall, turning right.')
-            self.cmd.angular.z = -ANGULAR_VEL * .5  # Turn slightly right
-            self.cmd.linear.x = LINEAR_VEL * 0.5   # Slow forward movement
+            self.cmd.angular.z = ANGULAR_VEL * 0.5
+        elif right_lidar_min < WALL_DISTANCE - LIDAR_ERROR:
+            self.cmd.angular.z = ANGULAR_VEL * 0.5
+            self.cmd.linear.x = LINEAR_VEL * 0.5
+        elif right_lidar_min > WALL_DISTANCE + LIDAR_ERROR:
+            self.cmd.angular.z = -ANGULAR_VEL * 0.5
+            self.cmd.linear.x = LINEAR_VEL * 0.5
         else:
-            # Maintain a straight path, but add a random angular velocity between -20 and 20 degrees
-            random_angle_deg = random.uniform(-45, 45)  # Generate random angle between -20 and 20 degrees
-            random_angle_rad = math.radians(random_angle_deg)  # Convert degrees to radians
-    
-            self.get_logger().info('Maintaining path with random direction change of %f degrees' % random_angle_deg)
-            
-            self.cmd.angular.z = random_angle_rad  # Set the random angular velocity
-            self.cmd.linear.x = LINEAR_VEL  # Maintain forward movement
+            random_angle = math.radians(random.uniform(-45, 45))
+            self.cmd.angular.z = random_angle
+            self.cmd.linear.x = LINEAR_VEL
         
-        # Publish the command
         self.publisher_.publish(self.cmd)
         
 def __del__(self):
-        # Ensure the file is closed when the node is destroyed
         self.position_file.close()    
     
 def main(args=None):
-    # initialize the ROS communication
     rclpy.init(args=args)
-    # declare the node constructor
     random_walk_node = RandomWalk()
-    # pause the program execution, waits for a request to kill the node (ctrl+c)
     rclpy.spin(random_walk_node)
-    # Explicity destroy the node
     random_walk_node.destroy_node()
-    # shutdown the ROS communication
     rclpy.shutdown()
-
 
 if __name__ == '__main__':
     main()
