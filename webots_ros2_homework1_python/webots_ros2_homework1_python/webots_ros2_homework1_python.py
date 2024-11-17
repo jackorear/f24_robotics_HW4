@@ -201,8 +201,7 @@ class RandomWalk(Node):
         
         # Publish the command
         self.publisher_.publish(self.cmd)
-def camera_callback(self, msg):
-        """Process camera images and detect AprilTags."""
+    def camera_callback(self, msg):
         try:
             # Convert the ROS2 Image message to an OpenCV image
             frame = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
