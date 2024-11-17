@@ -41,7 +41,7 @@ class RandomWalk(Node):
           # Camera subscriber
         self.camera_subscriber = self.create_subscription(
             Image,
-            '/camera/image_raw',
+            '/camera/image_color',
             self.camera_callback,
             QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         )
