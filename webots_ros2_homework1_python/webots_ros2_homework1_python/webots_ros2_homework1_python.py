@@ -34,6 +34,13 @@ class RandomWalk(Node):
         self.stall = False
         self.turtlebot_moving = False
         self.publisher_ = self.create_publisher(Twist, 'cmd_vel', 10)
+          # Camera subscriber
+        self.camera_subscriber = self.create_subscription(
+            Image,
+            '/camera/image_raw',
+            self.camera_callback,
+            QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
+        )
         self.subscriber1 = self.create_subscription(
             LaserScan,
             '/scan',
@@ -190,7 +197,24 @@ class RandomWalk(Node):
         
         # Publish the command
         self.publisher_.publish(self.cmd)
-        
+def camera_callback(self, msg):
+        """Process camera images and detect AprilTags."""
+        try:
+            # Convert the ROS2 Image message to an OpenCV image
+            frame = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            
+            # Detect AprilTags
+            detections = self.detector.detect(gray)
+            for detection in detections:
+                self.get_logger().info(f"Detected AprilTag ID: {detection.tag_id}")
+                
+                # Optionally, take an action based on the tag ID
+                if detection.tag_id == 0:  # Example condition
+                    self.get_logger().info("Special action for tag ID 0")
+        except Exception as e:
+            self.get_logger().error(f"Error processing camera feed: {str(e)}")
+
 def __del__(self):
         # Ensure the file is closed when the node is destroyed
         self.position_file.close()    
