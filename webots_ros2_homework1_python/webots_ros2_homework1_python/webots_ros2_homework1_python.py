@@ -90,13 +90,11 @@ class RandomWalk(Node):
     def turn_x_deg(self, x):
         x = math.radians(x)
         if self.orientation == None:
-            self.get_logger().info('Turn x deg called with None for self.current_orientation')
             return
         turn_duration = (x / ANGULAR_VEL)
         self.cmd.angular.z = ANGULAR_VEL
         self.cmd.linear.x = 0.0
         self.publisher_.publish(self.cmd)
-        self.get_logger().info('Turn x deg called for %f duration (s)' % turn_duration)
         time.sleep(turn_duration)
         self.cmd.angular.z = 0.0
         self.publisher_.publish(self.cmd)
@@ -143,14 +141,11 @@ class RandomWalk(Node):
         self.distance_from_start = self.dist_from_start(self.current_position)
     
         # Log the current position and distance from start
-        self.get_logger().info('Current position: {}'.format(self.current_position))
-        self.get_logger().info('Distance from start: {}'.format(self.distance_from_start))
     
         # Set initial position as the start position if it's the first odometry reading
         if self.start_x == 0.0 and self.start_y == 0.0:
             self.start_x = position.x
             self.start_y = position.y
-            self.get_logger().info('Initial position saved as: {}, {}'.format(self.start_x, self.start_y))
         # Write the current position to the file
         self.position_file.write(f'{position.x}, {position.y}\n')
         self.position_file.flush()  # Ensure the data is written to the file
@@ -166,13 +161,9 @@ class RandomWalk(Node):
         front_lidar_min = min(self.scan_cleaned[LEFT_FRONT_INDEX:RIGHT_FRONT_INDEX])
     
         # Log the distances for debugging
-        self.get_logger().info('Left side min distance: %f' % left_lidar_min)
-        self.get_logger().info('Front min distance: %f' % front_lidar_min)
-        self.get_logger().info('Right side min distance: %f' % right_lidar_min)
         
         # If an obstacle is directly in front, turn left to avoid it
         if front_lidar_min < SAFE_STOP_DISTANCE:
-            self.get_logger().info('Obstacle detected ahead, turning left.')
             self.cmd.linear.x = 0.0
             self.cmd.angular.z = ANGULAR_VEL * .5
             self.publisher_.publish(self.cmd)
@@ -181,12 +172,10 @@ class RandomWalk(Node):
         # Follow the right wall
         if right_lidar_min < WALL_DISTANCE - LIDAR_ERROR:
             # Too close to the right wall, turn left slightly
-            self.get_logger().info('Too close to right wall, turning left.')
             self.cmd.angular.z = ANGULAR_VEL * 0.5  # Turn slightly left
             self.cmd.linear.x = LINEAR_VEL * 0.5    # Slow forward movement
         elif right_lidar_min > WALL_DISTANCE + LIDAR_ERROR and right_lidar_min < 3 * (WALL_DISTANCE + LIDAR_ERROR):
             # Too far from the right wall, turn right slightly
-            self.get_logger().info('Too far from right wall, turning right.')
             self.cmd.angular.z = -ANGULAR_VEL * .5  # Turn slightly right
             self.cmd.linear.x = LINEAR_VEL * 0.5   # Slow forward movement
         else:
@@ -194,7 +183,6 @@ class RandomWalk(Node):
             random_angle_deg = random.uniform(-45, 45)  # Generate random angle between -20 and 20 degrees
             random_angle_rad = math.radians(random_angle_deg)  # Convert degrees to radians
     
-            self.get_logger().info('Maintaining path with random direction change of %f degrees' % random_angle_deg)
             
             self.cmd.angular.z = random_angle_rad  # Set the random angular velocity
             self.cmd.linear.x = LINEAR_VEL  # Maintain forward movement
