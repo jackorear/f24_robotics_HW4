@@ -35,13 +35,7 @@ class RandomWalk(Node):
         self.stall = False
         self.turtlebot_moving = False
         self.publisher_ = self.create_publisher(Twist, 'cmd_vel', 10)
-          # Camera subscriber
-        self.camera_subscriber = self.create_subscription(
-            Image,
-            '/camera/image_color',
-            self.camera_callback,
-            QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
-        )
+         
         self.subscriber1 = self.create_subscription(
             LaserScan,
             '/scan',
