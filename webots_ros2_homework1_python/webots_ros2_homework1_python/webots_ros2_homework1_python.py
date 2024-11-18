@@ -11,10 +11,7 @@ from rclpy.qos import ReliabilityPolicy, QoSProfile
 import math
 import time
 import random
-import cv2
-from cv_bridge import CvBridge
-import apriltag
-from sensor_msgs.msg import Image
+
 
 LINEAR_VEL = 0.15
 ANGULAR_VEL = 1.0
@@ -67,8 +64,6 @@ class RandomWalk(Node):
         self.distance_from_start = 0.0  # Track distance from start
         # Open a file for writing the position
         self.position_file = open('position.txt', 'w')
-        self.detector = apriltag.Detector()
-        self.bridge = CvBridge()
 
     def dist_from_start(self, pos):
         """Calculate distance from the starting position."""
@@ -191,22 +186,7 @@ class RandomWalk(Node):
         
         # Publish the command
         self.publisher_.publish(self.cmd)
-    def camera_callback(self, msg):
-        try:
-            # Convert the ROS2 Image message to an OpenCV image
-            frame = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
-            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            
-            # Detect AprilTags
-            detections = self.detector.detect(gray)
-            for detection in detections:
-                self.get_logger().info(f"Detected AprilTag ID: {detection.tag_id}")
-                
-                # Optionally, take an action based on the tag ID
-                if detection.tag_id == 0:  # Example condition
-                    self.get_logger().info("Special action for tag ID 0")
-        except Exception as e:
-            self.get_logger().error(f"Error processing camera feed: {str(e)}")
+  
 
 def __del__(self):
         # Ensure the file is closed when the node is destroyed
