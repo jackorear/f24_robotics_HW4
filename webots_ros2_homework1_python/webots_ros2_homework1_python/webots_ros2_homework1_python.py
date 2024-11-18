@@ -67,6 +67,8 @@ class RandomWalk(Node):
         self.distance_from_start = 0.0  # Track distance from start
         # Open a file for writing the position
         self.position_file = open('position.txt', 'w')
+        self.detector = apriltag.Detector()
+        self.bridge = CvBridge()
 
     def dist_from_start(self, pos):
         """Calculate distance from the starting position."""
