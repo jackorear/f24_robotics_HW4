@@ -270,7 +270,7 @@ class RandomWalk(Node):
         self.get_logger().info('Front distance : %f' % front_lidar_min)
         self.get_logger().info('Left distance : %f' % left_lidar_min)
         self.get_logger().info('Right distance : %f' % right_lidar_min)
-        # self.get_logger().info('I receive: "%s"' % str(self.odom_data))
+        # self.get_logger().info('I receive: "%s"' % str(self.odom_data)) 
         if self.stall == True:
            self.get_logger().info('Stall reported')
            # self.cmd.linear.x = 0.0
