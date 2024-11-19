@@ -14,7 +14,7 @@ import statistics
 
 last_change_direction_time = time.time()
 
-LINEAR_VEL = 0.22
+LINEAR_VEL = 0.1
 STOP_DISTANCE = 0.2
 LIDAR_ERROR = 0.05
 LIDAR_AVOID_DISTANCE = 0.48
