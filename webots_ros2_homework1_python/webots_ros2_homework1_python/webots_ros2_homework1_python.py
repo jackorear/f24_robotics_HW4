@@ -185,27 +185,6 @@ class RandomWalk(Node):
                     self.get_logger().info('Wall found and oriented. Proceeding to navigation.')
 
         else: # the robot has found a wall and is beginning normal navigation
-            
-            #if (self.stall == True): # if the robot is stalling
-                    '''
-                    #if (self.stall_rotating == False):
-                        self.cmd.linear.x = -0.8
-                        self.cmd.angular.z = 0.3                    
-                        self.publisher_.publish(self.cmd)
-                        self.turtlebot_moving = True
-                        self.stall_rotating = True
-                        self.get_logger().info('Reversing out of a stall.')
-                    #else:
-                        
-                        self.cmd.linear.x = 0.0
-                        self.cmd.angular.z = 0.0
-                        self.publisher_.publish(self.cmd)
-                        self.turtlebot_moving = True
-                        self.rotating = True
-                        self.stall = False
-                        self.stall_count= 0
-                        self.get_logger().info('Reversing out of a stall.')
-                        '''
 
             if (front_lidar_min < SAFE_STOP_DISTANCE): # if the robot is an unsafe distance away from an obstacle
                 if self.turtlebot_moving == True:
@@ -280,6 +259,26 @@ class RandomWalk(Node):
 
         # Display the message on the console
         # self.get_logger().info('Publishing: "%s"' % self.cmd)
+                    #if (self.stall == True): # if the robot is stalling
+                    
+                    ##if (self.stall_rotating == False):
+                    #    self.cmd.angular.z = 0.3                    
+                    #    self.publisher_.publish(self.cmd)
+                    #    self.cmd.linear.x = -0.8
+                    #    self.turtlebot_moving = True
+                    #    self.stall_rotating = True
+                    #    self.get_logger().info('Reversing out of a stall.')
+                    ##else:
+                    #    
+                    #    self.cmd.linear.x = 0.0
+                    #    self.cmd.angular.z = 0.0
+                    #    self.publisher_.publish(self.cmd)
+                    #    self.turtlebot_moving = True
+                    #    self.rotating = True
+                    #    self.stall = False
+                    #    self.stall_count= 0
+                    #    self.get_logger().info('Reversing out of a stall.')
+                    #    
 
 def main(args=None):
     # initialize the ROS communication
