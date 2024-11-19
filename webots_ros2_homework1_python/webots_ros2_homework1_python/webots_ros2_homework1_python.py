@@ -9,25 +9,26 @@ from nav_msgs.msg import Odometry
 # import Quality of Service library, to set the correct profile and reliability in order to read sensor data.
 from rclpy.qos import ReliabilityPolicy, QoSProfile
 import math
+import time
+import statistics
 
-LINEAR_VEL = 0.150
-ROTATIONAL_VEL = math.radians(30)
-DISTANCE = 5
-ROTATION = math.radians(180)
-MODE = 0
-# 1 for distance, 0 for rotation
+last_change_direction_time = time.time()
 
-def quaternion_to_yaw(self, q):
+LINEAR_VEL = 0.22
+STOP_DISTANCE = 0.2
+LIDAR_ERROR = 0.05
+LIDAR_AVOID_DISTANCE = 0.48
+SAFE_STOP_DISTANCE = STOP_DISTANCE + LIDAR_ERROR
+LIDAR_WALL_SHORT_DISTANCE = 0.4
+LIDAR_WALL_FAR_DISTANCE = 0.6
+RIGHT_SIDE_INDEX = 270
+RIGHT_FRONT_INDEX = 210 
+LEFT_FRONT_INDEX= 150
+LEFT_SIDE_INDEX= 90
 
-        # Quaternion to Euler angles (yaw)
-
-        siny_cosp = 2 * (q.w * q.z + q.x * q.y)
-
-        cosy_cosp = 1 - 2 * (q.y * q.y + q.z * q.z)
-
-        yaw = math.atan2(siny_cosp, cosy_cosp)
-
-        return yaw
+# defines the linear speed of the robot based on how far away from the right wall it is
+def linear_speed_calc(neg, distance, limit):
+    return ((neg) * 10.0) * (distance - limit) # i didn't copy this from anything i just messed around in desmos till i found a curve i liked i know its scuffed i'm sorry
 
 class RandomWalk(Node):
 
@@ -36,13 +37,15 @@ class RandomWalk(Node):
         super().__init__('random_walk_node')
         self.scan_cleaned = []
         self.stall = False
-        self.turtlebot_moving = True
+        self.stall_count = 0
+        self.stall_rotating = False
+        self.turtlebot_moving = False
         self.publisher_ = self.create_publisher(Twist, 'cmd_vel', 10)
-        #self.subscriber1 = self.create_subscription(
-        #    LaserScan,
-        #    '/scan',
-        #    self.listener_callback1,
-        #    QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT))
+        self.subscriber1 = self.create_subscription(
+            LaserScan,
+            '/scan',
+            self.listener_callback1,
+            QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT))
         self.subscriber2 = self.create_subscription(
             Odometry,
             '/odom',
@@ -50,31 +53,37 @@ class RandomWalk(Node):
             QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT))
         self.laser_forward = 0
         self.odom_data = 0
-        timer_period = 0.1
+        timer_period = 0.5
+
+        # Coordinates saved in order to calculate stalls
+        self.pose_saved=''
+        self.orien_saved=''
+        self.front_distance_saved=0.0
+        self.front_distance_saved_prev=0.0
+
         self.cmd = Twist()
         self.timer = self.create_timer(timer_period, self.timer_callback)
-        self.timer_count = 0
-        self.position_file = open('position.txt', 'a')
-        self.position_start_write = False
-        self.position_stop_write = False
-        self.orientation_z = 0.0
+        self.found_wall = False
+        self.rotating = False
+        # False is start, True is following a wall
+
     
     # subscribes to laser scan publishes
-    #def listener_callback1(self, msg1):
+    def listener_callback1(self, msg1):
         # self.get_logger().info('scan: "%s"' % msg1.ranges)
-        #scan = msg1.ranges
-        #self.scan_cleaned = []
+        scan = msg1.ranges
+        self.scan_cleaned = []
        
         # self.get_logger().info('scan: "%s"' % scan)
         # self.get_logger().info('--------ENDOFSCAN--------')
         # Assume 360 range measurements
-        #for reading in scan:
-        #    if reading == float('Inf'):
-        #        self.scan_cleaned.append(3.5)
-        #    elif math.isnan(reading):
-        #        self.scan_cleaned.append(0.0)
-        #    else:
-        #        self.scan_cleaned.append(reading)
+        for reading in scan:
+            if reading == float('Inf'):
+                self.scan_cleaned.append(3.5)
+            elif math.isnan(reading):
+                self.scan_cleaned.append(0.0)
+            else:
+                self.scan_cleaned.append(reading)
 
     # subscribes to odometry publishes
     def listener_callback2(self, msg2):
@@ -82,56 +91,191 @@ class RandomWalk(Node):
         orientation = msg2.pose.pose.orientation
         (posx, posy, posz) = (position.x, position.y, position.z)
         (qx, qy, qz, qw) = (orientation.x, orientation.y, orientation.z, orientation.w)
+        
 
-        self.orientation_z = quaternion_to_yaw(self, orientation)
+        # self.get_logger().info('self position: {},{},{}'.format(posx,posy,posz))
+        # similarly for twist message if you need
+        #Example of how to identify a stall..need better tuned position deltas; wheels spin and example fast
+        #diffX = math.fabs(self.pose_saved.x- position.x)
+        #diffY = math.fabs(self.pose_saved.y - position.y)
+        #if (diffX < 0.0001 and diffY < 0.0001):
+           #self.stall = True
+        #else:
+           #self.stall = False
+        ## ----
+        # fabs() returns the value as a float
+        # not sure yet how pose_saved and position are different if pose_saved is defined by position
+        if self.pose_saved == '':
+            self.pose_saved = position
+            self.orien_saved = orientation
+            self.front_distance_saved_prev = self.front_distance_saved
+        else: 
+            if self.stall_count >= 40:
+                diffX = math.fabs(self.pose_saved.x - position.x)
+                diffY = math.fabs(self.pose_saved.y - position.y)
+                diffZ = math.fabs(self.orien_saved.z - orientation.z)
+                diffDist = math.fabs(self.front_distance_saved_prev - self.front_distance_saved)
+                if ((diffX < 0.001 and diffY < 0.001 and diffZ < 0.001) or diffDist < 0.001): 
+                    self.stall = True
+                else: 
+                    self.stall = False
+                self.stall_count = 0
+                self.pose_saved = position
+                self.orien_saved = orientation
+                self.front_distance_saved_prev = self.front_distance_saved
+            else:
+                self.stall_count = self.stall_count + 1
 
-        if MODE == 1:
-            if self.position_start_write == False: 
-                self.position_file.write(f'Speed: {LINEAR_VEL}\nDistance: {DISTANCE}\nStart: {position.x}, {position.y}\n')
-                self.position_start_write = True
-            
-            elif self.turtlebot_moving == False and self.position_stop_write == False:
-                self.position_file.write(f'Stop: {position.x}, {position.y}\n\n')
-                self.position_stop_write = True
-            
-        else:
-            if self.position_start_write == False: 
-                self.position_file.write(f'Speed: {ROTATIONAL_VEL}\nRotation: {ROTATION}\nStart: {self.orientation_z}\n')
-                self.position_start_write = True
-            
-            elif self.turtlebot_moving == False and self.position_stop_write == False:
-                self.position_file.write(f'Stop: {self.orientation_z}\n\n')
-                self.position_stop_write = True
 
+        #self.get_logger().info('diffX : %f ' % diffX)
+        #self.get_logger().info('diffY : %f ' % diffY)
+        #self.get_logger().info('diffZ : %f ' % diffZ)
+
+        ## ----
+           
         return None
         
     def timer_callback(self):
-
-        self.timer_count = self.timer_count + 1
-        # self.get_logger().info('Timer count: %s' % self.timer_count)
+        if (len(self.scan_cleaned)==0):
+            self.turtlebot_moving = False
+            return
+            
+        #left_lidar_samples = self.scan_cleaned[LEFT_SIDE_INDEX:LEFT_FRONT_INDEX]
+        #right_lidar_samples = self.scan_cleaned[RIGHT_FRONT_INDEX:RIGHT_SIDE_INDEX]
+        #front_lidar_samples = self.scan_cleaned[LEFT_FRONT_INDEX:RIGHT_FRONT_INDEX]
         
-        if MODE == 1:
-            if (LINEAR_VEL * self.timer_count * .1 >= DISTANCE):
-                self.cmd.linear.x = 0.0
-                self.turtlebot_moving = False
-            else: 
-                self.cmd.linear.x = LINEAR_VEL
+        left_lidar_min  = min(self.scan_cleaned[LEFT_SIDE_INDEX:LEFT_FRONT_INDEX])
+        right_lidar_min = min(self.scan_cleaned[RIGHT_FRONT_INDEX:RIGHT_SIDE_INDEX])
+        front_lidar_min = min(self.scan_cleaned[LEFT_FRONT_INDEX:RIGHT_FRONT_INDEX])
+        self.front_distance_saved = left_lidar_min
+        
+        
+        #right_lidar_avg = statistics.mean(self.scan_cleaned[RIGHT_FRONT_INDEX:RIGHT_SIDE_INDEX])
+        #right_lidar_perp = min(self.scan_cleaned[230:250])
 
-        else:
-            if (ROTATIONAL_VEL * self.timer_count * .1 >= ROTATION) and (self.timer_count != 1):
+        #self.get_logger().info('left scan slice: "%s"'%  min(left_lidar_samples))
+        #self.get_logger().info('front scan slice: "%s"'%  min(front_lidar_samples))
+        #self.get_logger().info('right scan slice: "%s"'%  min(right_lidar_samples))
+
+        # if the front lidar is less than the safe stopping distance (less than avoid distance), 
+        # stops the robot's movement, publishes the speeds, and sets the moving flag to false
+
+        if self.found_wall == False: # robot is starting/lost and does not know where a wall is
+            if (front_lidar_min > LIDAR_WALL_SHORT_DISTANCE) & (right_lidar_min > LIDAR_WALL_SHORT_DISTANCE) & (left_lidar_min > LIDAR_WALL_SHORT_DISTANCE):
+                self.cmd.linear.x = 0.5
                 self.cmd.angular.z = 0.0
-                self.turtlebot_moving = False
-                self.get_logger().info('1')
+                self.publisher_.publish(self.cmd)
+                self.turtlebot_moving = True
+                self.get_logger().info('Finding a wall.')
             else:
-                self.cmd.angular.z = ROTATIONAL_VEL
-                self.get_logger().info('2')
-        
-        self.publisher_.publish(self.cmd)
-        ##self.get_logger().info('Z Velocity: %s' % self.cmd.angular.z)
-        ##self.get_logger().info('Rotational vel: %s' % (ROTATIONAL_VEL * self.timer_count * .1))
-        ##self.get_logger().info('Rotation ideal: %s' % ROTATION)
-        self.get_logger().info('Orientation z: %s' % self.orientation_z)
-        
+                # found a wall, rotating so that the wall is on the robot's right
+                if (right_lidar_min > LIDAR_WALL_SHORT_DISTANCE):
+                    self.cmd.linear.x = 0.0
+                    self.cmd.angular.z = 0.2
+                    self.publisher_.publish(self.cmd)
+                    self.turtlebot_moving = True
+                    self.get_logger().info('Rotating until wall is on right.')
+                else: 
+                    self.found_wall = True
+                    self.cmd.linear.x = 0.0
+                    self.cmd.angular.z = 0.0
+                    self.publisher_.publish(self.cmd)
+                    self.turtlebot_moving = True
+                    self.get_logger().info('Wall found and oriented. Proceeding to navigation.')
+
+        else: # the robot has found a wall and is beginning normal navigation
+            
+            if (self.stall == True): # if the robot is stalling
+                    #if (self.stall_rotating == False):
+                        self.cmd.linear.x = -0.8
+                        self.cmd.angular.z = 0.3                    
+                        self.publisher_.publish(self.cmd)
+                        self.turtlebot_moving = True
+                        self.stall_rotating = True
+                        self.get_logger().info('Reversing out of a stall.')
+                    #else:
+                        '''
+                        self.cmd.linear.x = 0.0
+                        self.cmd.angular.z = 0.0
+                        self.publisher_.publish(self.cmd)
+                        self.turtlebot_moving = True
+                        self.rotating = True
+                        self.stall = False
+                        self.stall_count= 0
+                        self.get_logger().info('Reversing out of a stall.')
+                        '''
+
+            elif (front_lidar_min < SAFE_STOP_DISTANCE): # if the robot is an unsafe distance away from an obstacle
+                if self.turtlebot_moving == True:
+                    self.cmd.linear.x = -0.5 
+                    self.cmd.angular.z = 0.0 
+                    self.publisher_.publish(self.cmd)
+                    self.turtlebot_moving = False   
+                    self.stall_count = 0
+                    self.stall_rotating = True
+                    self.get_logger().info('Stopping due to unsafe distance from obstacle.')
+                    return
+            
+            elif (self.rotating == True): # if the robot has been told to rotate for any reason
+                                          # forces the robot to go to a right angle rather than continuing forward the moment there is any free area in front
+                if front_lidar_min > (right_lidar_min + LIDAR_ERROR) & (front_lidar_min > LIDAR_AVOID_DISTANCE) & (right_lidar_min > LIDAR_AVOID_DISTANCE):
+                    self.cmd.linear.x = 0.0
+                    self.cmd.angular.z = 0.0
+                    self.rotating = False
+                    self.publisher_.publish(self.cmd)
+                    self.turtlebot_moving = False
+                    self.stall_count = 0
+                    self.stall_rotating = True
+                    self.get_logger().info('Finishing rotating.')
+
+            elif (front_lidar_min <= LIDAR_AVOID_DISTANCE): # if the robot has encountered an obstacle in front of it, rotate to the left
+                self.cmd.linear.x = 0.0
+                self.cmd.angular.z = 0.5
+                self.publisher_.publish(self.cmd)
+                self.turtlebot_moving = True
+                self.stall_count = 0
+                self.stall_rotating = True
+                self.get_logger().info('Obstacle too close to front of robot. Currently rotating to the left.')
+
+            elif (right_lidar_min > LIDAR_WALL_FAR_DISTANCE): # if the robot is too far away from the right wall
+                self.cmd.linear.x = 0.8 * (10.0 ** linear_speed_calc(-1, right_lidar_min, LIDAR_WALL_FAR_DISTANCE))
+                self.cmd.angular.z = -0.5 * (0.1 ** linear_speed_calc(-1, right_lidar_min, .7))  # ideally this would be controlled by a PID
+                self.get_logger().info('Front distance : %f' % front_lidar_min)
+                self.publisher_.publish(self.cmd)
+                self.turtlebot_moving = True
+                self.stall_count = 0
+                self.stall_rotating = True
+                self.get_logger().info('FAR: Adjusting closer to the wall. Angular speed is %f' % (0.2 * right_lidar_min))
+
+            elif (right_lidar_min < LIDAR_WALL_SHORT_DISTANCE): # if the robot is too close to the right wall
+                self.cmd.linear.x = 0.8 * (0.1 ** linear_speed_calc(-1, right_lidar_min, LIDAR_WALL_SHORT_DISTANCE))
+                self.cmd.angular.z = 0.5 * (10.0 ** linear_speed_calc(-1, right_lidar_min, STOP_DISTANCE)) # ideally this would be controlled by a PID
+                self.publisher_.publish(self.cmd)
+                self.turtlebot_moving = True
+                self.stall_count = 0
+                self.stall_rotating = True
+                self.get_logger().info('CLOSE: Adjusting farther from the wall. Angular speed is %f' % (0.2 * right_lidar_min))
+            
+            else:
+                self.cmd.linear.x = 0.6
+                self.cmd.angular.z = 0.0
+                self.publisher_.publish(self.cmd)
+                self.turtlebot_moving = True
+                self.stall_count = 0
+                self.stall_rotating = True
+                self.get_logger().info('WEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE')
+
+        self.get_logger().info('Front distance : %f' % front_lidar_min)
+        self.get_logger().info('Left distance : %f' % left_lidar_min)
+        self.get_logger().info('Right distance : %f' % right_lidar_min)
+        # self.get_logger().info('I receive: "%s"' % str(self.odom_data))
+        if self.stall == True:
+           self.get_logger().info('Stall reported')
+           # self.cmd.linear.x = 0.0
+           # self.cmd.angular.z = 0.5
+           #self.turtlebot_moving = True
+           # time.sleep(1)
+
         # Display the message on the console
         # self.get_logger().info('Publishing: "%s"' % self.cmd)
 
