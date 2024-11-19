@@ -22,10 +22,15 @@ LIDAR_AVOID_DISTANCE = 0.48
 SAFE_STOP_DISTANCE = STOP_DISTANCE + LIDAR_ERROR
 LIDAR_WALL_SHORT_DISTANCE = 0.4
 LIDAR_WALL_FAR_DISTANCE = 0.6
-RIGHT_SIDE_INDEX = 270
-RIGHT_FRONT_INDEX = 210 
-LEFT_FRONT_INDEX= 150
-LEFT_SIDE_INDEX= 90
+#RIGHT_SIDE_INDEX = 270
+#RIGHT_FRONT_INDEX = 210 
+#LEFT_FRONT_INDEX= 150
+#LEFT_SIDE_INDEX= 90
+
+RIGHT_SIDE_INDEX = 90
+RIGHT_FRONT_INDEX = 30
+LEFT_FRONT_INDEX = 330
+LEFT_SIDE_INDEX = 270
 
 # defines the linear speed of the robot based on how far away from the right wall it is
 def linear_speed_calc(neg, distance, limit):
@@ -82,7 +87,9 @@ class RandomWalk(Node):
             if reading == float('Inf'):
                 self.scan_cleaned.append(3.5)
             elif math.isnan(reading):
-                self.scan_cleaned.append(0.0)
+                self.scan_cleaned.append(0.01)
+            elif reading == float(0):
+                self.scan_cleaned.append(10.0)
             else:
                 self.scan_cleaned.append(reading)
 
