@@ -175,7 +175,7 @@ class RandomWalk(Node):
             self.get_logger().info('Too close to right wall, turning left.')
             self.cmd.angular.z = ANGULAR_VEL * 0.5  # Turn slightly left
             self.cmd.linear.x = LINEAR_VEL * 0.5    # Slow forward movement
-        elif right_lidar_min > WALL_DISTANCE + LIDAR_ERROR and right_lidar_min < 3 * (WALL_DISTANCE + LIDAR_ERROR):
+        elif right_lidar_min > WALL_DISTANCE + LIDAR_ERROR and right_lidar_min < 1.4 * (WALL_DISTANCE):
             # Too far from the right wall, turn right slightly
             self.get_logger().info('Too far from right wall, turning right.')
             self.cmd.angular.z = -ANGULAR_VEL * .5  # Turn slightly right

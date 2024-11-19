@@ -1,4 +1,4 @@
-.#!/usr/bin/env python
+#!/usr/bin/env python
 
 # Copyright 1996-2023 Cyberbotics Ltd.
 #
@@ -32,7 +32,7 @@ from webots_ros2_driver.wait_for_controller_connection import WaitForControllerC
 
 
 def generate_launch_description():
-    package_dir = get_package_share_directory('webots_apriltags')
+    package_dir = get_package_share_directory('webots_ros2_homework1_python')
     world = LaunchConfiguration('world')
     mode = LaunchConfiguration('mode')
     use_sim_time = LaunchConfiguration('use_sim_time', default=True)
@@ -98,16 +98,13 @@ def generate_launch_description():
         target_driver=turtlebot_driver,
         nodes_to_start= ros_control_spawners
     )
-    
-    rviz_config_dir = os.path.join(get_package_share_directory('webots_apriltags'),
-                                   'rviz', 'turtlebot3_apriltags.rviz')
 
 
 
     return LaunchDescription([
         DeclareLaunchArgument(
             'world',
-            default_value='turtlebot3_apriltags.wbt',
+            default_value='f23_robotics_1.wbt',
             description='Choose one of the world files from `/webots_ros2_turtlebot/world` directory'
         ),
         DeclareLaunchArgument(
@@ -133,16 +130,4 @@ def generate_launch_description():
                 ],
             )
         ),
-        Node(
-            package='rviz2',
-            executable='rviz2',
-            name='rviz2',
-            arguments=['-d', rviz_config_dir],
-            parameters=[{'use_sim_time': use_sim_time}],
-            output='screen'),
-        Node(
-            package='v4l2_camera'
-            executable='v4l2_camera'
-            name='v412_camera'
-            output='screen'),
     ])
