@@ -186,7 +186,7 @@ class RandomWalk(Node):
 
         else: # the robot has found a wall and is beginning normal navigation
             
-            if (self.stall == True): # if the robot is stalling
+            #if (self.stall == True): # if the robot is stalling
                     '''
                     #if (self.stall_rotating == False):
                         self.cmd.linear.x = -0.8
@@ -207,7 +207,7 @@ class RandomWalk(Node):
                         self.get_logger().info('Reversing out of a stall.')
                         '''
 
-            elif (front_lidar_min < SAFE_STOP_DISTANCE): # if the robot is an unsafe distance away from an obstacle
+            if (front_lidar_min < SAFE_STOP_DISTANCE): # if the robot is an unsafe distance away from an obstacle
                 if self.turtlebot_moving == True:
                     self.cmd.linear.x = 0.0
                     self.cmd.angular.z = 0.0 
@@ -271,8 +271,8 @@ class RandomWalk(Node):
         self.get_logger().info('Left distance : %f' % left_lidar_min)
         self.get_logger().info('Right distance : %f' % right_lidar_min)
         # self.get_logger().info('I receive: "%s"' % str(self.odom_data)) 
-        if self.stall == True:
-           self.get_logger().info('Stall reported')
+        #if self.stall == True:
+        #   self.get_logger().info('Stall reported')
            # self.cmd.linear.x = 0.0
            # self.cmd.angular.z = 0.5
            #self.turtlebot_moving = True
