@@ -14,14 +14,14 @@ import statistics
 
 last_change_direction_time = time.time()
 
-LINEAR_VEL = 0.22
-ROT_VEL = 0.2
-STOP_DISTANCE = 0.2
+LINEAR_VEL = 0.18
+ROT_VEL = 0.15
+STOP_DISTANCE = 0.3
 LIDAR_ERROR = 0.05
-LIDAR_AVOID_DISTANCE = 0.48
+LIDAR_AVOID_DISTANCE = 0.6
 SAFE_STOP_DISTANCE = STOP_DISTANCE + LIDAR_ERROR
 LIDAR_WALL_SHORT_DISTANCE = 0.4
-LIDAR_WALL_FAR_DISTANCE = 0.6
+LIDAR_WALL_FAR_DISTANCE = 0.7
 #RIGHT_SIDE_INDEX = 270
 #RIGHT_FRONT_INDEX = 210 
 #LEFT_FRONT_INDEX= 150
@@ -227,7 +227,7 @@ class RandomWalk(Node):
 
             elif (right_lidar_min > LIDAR_WALL_FAR_DISTANCE): # if the robot is too far away from the right wall
                 self.cmd.linear.x = LINEAR_VEL * (10.0 ** linear_speed_calc(-1, right_lidar_min, LIDAR_WALL_FAR_DISTANCE))
-                self.cmd.angular.z = -ROT_VEL * (0.1 ** linear_speed_calc(-1, right_lidar_min, .7))  # ideally this would be controlled by a PID
+                self.cmd.angular.z = ROT_VEL * (0.1 ** linear_speed_calc(-1, right_lidar_min, .7))  # ideally this would be controlled by a PID
                 self.get_logger().info('Front distance : %f' % front_lidar_min)
                 self.publisher_.publish(self.cmd)
                 self.turtlebot_moving = True
@@ -237,7 +237,7 @@ class RandomWalk(Node):
 
             elif (right_lidar_min < LIDAR_WALL_SHORT_DISTANCE): # if the robot is too close to the right wall
                 self.cmd.linear.x = LINEAR_VEL * (0.1 ** linear_speed_calc(-1, right_lidar_min, LIDAR_WALL_SHORT_DISTANCE))
-                self.cmd.angular.z = ROT_VEL * (10.0 ** linear_speed_calc(-1, right_lidar_min, STOP_DISTANCE)) # ideally this would be controlled by a PID
+                self.cmd.angular.z = -ROT_VEL * (10.0 ** linear_speed_calc(-1, right_lidar_min, STOP_DISTANCE)) # ideally this would be controlled by a PID
                 self.publisher_.publish(self.cmd)
                 self.turtlebot_moving = True
                 self.stall_count = 0
