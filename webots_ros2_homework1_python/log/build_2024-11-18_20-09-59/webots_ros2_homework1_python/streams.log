@@ -1,0 +1,24 @@
+[6.309s] Invoking command in '/home/jack/f24_robotics_HW4/webots_ros2_homework1_python': PYTHONPATH=/home/jack/f24_robotics_HW4/webots_ros2_homework1_python/build/webots_ros2_homework1_python/prefix_override:/home/jack/.local/lib/python3.10/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/jack/f24_robotics_HW4/webots_ros2_homework1_python/install/webots_ros2_homework1_python/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base build/webots_ros2_homework1_python build --build-base /home/jack/f24_robotics_HW4/webots_ros2_homework1_python/build/webots_ros2_homework1_python/build install --record /home/jack/f24_robotics_HW4/webots_ros2_homework1_python/build/webots_ros2_homework1_python/install.log --single-version-externally-managed install_data
+[8.727s] running egg_info
+[8.733s] writing build/webots_ros2_homework1_python/webots_ros2_homework1_python.egg-info/PKG-INFO
+[8.738s] writing dependency_links to build/webots_ros2_homework1_python/webots_ros2_homework1_python.egg-info/dependency_links.txt
+[8.744s] writing entry points to build/webots_ros2_homework1_python/webots_ros2_homework1_python.egg-info/entry_points.txt
+[8.746s] writing requirements to build/webots_ros2_homework1_python/webots_ros2_homework1_python.egg-info/requires.txt
+[8.759s] writing top-level names to build/webots_ros2_homework1_python/webots_ros2_homework1_python.egg-info/top_level.txt
+[8.764s] reading manifest file 'build/webots_ros2_homework1_python/webots_ros2_homework1_python.egg-info/SOURCES.txt'
+[8.773s] writing manifest file 'build/webots_ros2_homework1_python/webots_ros2_homework1_python.egg-info/SOURCES.txt'
+[8.774s] running build
+[8.774s] running build_py
+[8.778s] copying webots_ros2_homework1_python/webots_ros2_homework1_python.py -> /home/jack/f24_robotics_HW4/webots_ros2_homework1_python/build/webots_ros2_homework1_python/build/lib/webots_ros2_homework1_python
+[8.779s] running install
+[8.779s] running install_lib
+[8.787s] copying /home/jack/f24_robotics_HW4/webots_ros2_homework1_python/build/webots_ros2_homework1_python/build/lib/webots_ros2_homework1_python/webots_ros2_homework1_python.py -> /home/jack/f24_robotics_HW4/webots_ros2_homework1_python/install/webots_ros2_homework1_python/lib/python3.10/site-packages/webots_ros2_homework1_python
+[8.799s] byte-compiling /home/jack/f24_robotics_HW4/webots_ros2_homework1_python/install/webots_ros2_homework1_python/lib/python3.10/site-packages/webots_ros2_homework1_python/webots_ros2_homework1_python.py to webots_ros2_homework1_python.cpython-310.pyc
+[8.807s] running install_data
+[8.811s] running install_egg_info
+[8.825s] removing '/home/jack/f24_robotics_HW4/webots_ros2_homework1_python/install/webots_ros2_homework1_python/lib/python3.10/site-packages/webots_ros2_homework1_python-0.0.0-py3.10.egg-info' (and everything under it)
+[8.828s] Copying build/webots_ros2_homework1_python/webots_ros2_homework1_python.egg-info to /home/jack/f24_robotics_HW4/webots_ros2_homework1_python/install/webots_ros2_homework1_python/lib/python3.10/site-packages/webots_ros2_homework1_python-0.0.0-py3.10.egg-info
+[8.843s] running install_scripts
+[9.004s] Installing webots_ros2_homework1_python script to /home/jack/f24_robotics_HW4/webots_ros2_homework1_python/install/webots_ros2_homework1_python/lib/webots_ros2_homework1_python
+[9.007s] writing list of installed files to '/home/jack/f24_robotics_HW4/webots_ros2_homework1_python/build/webots_ros2_homework1_python/install.log'
+[9.293s] Invoked command in '/home/jack/f24_robotics_HW4/webots_ros2_homework1_python' returned '0': PYTHONPATH=/home/jack/f24_robotics_HW4/webots_ros2_homework1_python/build/webots_ros2_homework1_python/prefix_override:/home/jack/.local/lib/python3.10/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/jack/f24_robotics_HW4/webots_ros2_homework1_python/install/webots_ros2_homework1_python/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base build/webots_ros2_homework1_python build --build-base /home/jack/f24_robotics_HW4/webots_ros2_homework1_python/build/webots_ros2_homework1_python/build install --record /home/jack/f24_robotics_HW4/webots_ros2_homework1_python/build/webots_ros2_homework1_python/install.log --single-version-externally-managed install_data

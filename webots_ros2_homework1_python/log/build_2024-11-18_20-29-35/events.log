@@ -1,0 +1,124 @@
+[0.000000] (-) TimerEvent: {}
+[0.002118] (webots_ros2_homework1_python) JobQueued: {'identifier': 'webots_ros2_homework1_python', 'dependencies': OrderedDict()}
+[0.002430] (webots_ros2_homework1_python) JobStarted: {'identifier': 'webots_ros2_homework1_python'}
+[0.097170] (-) TimerEvent: {}
+[0.198843] (-) TimerEvent: {}
+[0.300443] (-) TimerEvent: {}
+[0.405008] (-) TimerEvent: {}
+[0.514867] (-) TimerEvent: {}
+[0.618041] (-) TimerEvent: {}
+[0.718786] (-) TimerEvent: {}
+[0.819724] (-) TimerEvent: {}
+[0.920854] (-) TimerEvent: {}
+[1.022928] (-) TimerEvent: {}
+[1.124409] (-) TimerEvent: {}
+[1.228066] (-) TimerEvent: {}
+[1.330005] (-) TimerEvent: {}
+[1.430833] (-) TimerEvent: {}
+[1.531742] (-) TimerEvent: {}
+[1.633421] (-) TimerEvent: {}
+[1.734207] (-) TimerEvent: {}
+[1.835259] (-) TimerEvent: {}
+[1.936071] (-) TimerEvent: {}
+[2.036789] (-) TimerEvent: {}
+[2.137565] (-) TimerEvent: {}
+[2.238334] (-) TimerEvent: {}
+[2.339201] (-) TimerEvent: {}
+[2.440041] (-) TimerEvent: {}
+[2.540930] (-) TimerEvent: {}
+[2.641948] (-) TimerEvent: {}
+[2.742687] (-) TimerEvent: {}
+[2.843951] (-) TimerEvent: {}
+[2.958726] (-) TimerEvent: {}
+[3.067233] (-) TimerEvent: {}
+[3.168473] (-) TimerEvent: {}
+[3.273950] (-) TimerEvent: {}
+[3.375139] (-) TimerEvent: {}
+[3.475992] (-) TimerEvent: {}
+[3.579166] (-) TimerEvent: {}
+[3.686807] (-) TimerEvent: {}
+[3.787717] (-) TimerEvent: {}
+[3.888430] (-) TimerEvent: {}
+[3.990941] (-) TimerEvent: {}
+[4.091816] (-) TimerEvent: {}
+[4.192908] (-) TimerEvent: {}
+[4.295141] (-) TimerEvent: {}
+[4.396411] (-) TimerEvent: {}
+[4.497329] (-) TimerEvent: {}
+[4.598073] (-) TimerEvent: {}
+[4.699733] (-) TimerEvent: {}
+[4.800605] (-) TimerEvent: {}
+[4.901827] (-) TimerEvent: {}
+[5.004282] (-) TimerEvent: {}
+[5.105515] (-) TimerEvent: {}
+[5.206428] (-) TimerEvent: {}
+[5.307128] (-) TimerEvent: {}
+[5.407846] (-) TimerEvent: {}
+[5.508651] (-) TimerEvent: {}
+[5.611610] (-) TimerEvent: {}
+[5.712622] (-) TimerEvent: {}
+[5.813388] (-) TimerEvent: {}
+[5.914805] (-) TimerEvent: {}
+[6.015801] (-) TimerEvent: {}
+[6.117419] (-) TimerEvent: {}
+[6.218911] (-) TimerEvent: {}
+[6.321122] (-) TimerEvent: {}
+[6.385069] (webots_ros2_homework1_python) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', 'build/webots_ros2_homework1_python', 'build', '--build-base', '/home/jack/f24_robotics_HW4/webots_ros2_homework1_python/build/webots_ros2_homework1_python/build', 'install', '--record', '/home/jack/f24_robotics_HW4/webots_ros2_homework1_python/build/webots_ros2_homework1_python/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/jack/f24_robotics_HW4/webots_ros2_homework1_python', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'jack', 'SSH_CLIENT': '192.168.1.72 36877 22', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/jack', 'OLDPWD': '/home/jack/f24_robotics_HW4', 'SSH_TTY': '/dev/pts/4', 'ROS_PYTHON_VERSION': '3', 'ALL': 'en_US.UTF8', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLCON_PREFIX_PATH': '/home/jack/f24_robotics_HW4/webots_ros2_homework1_python/install:/home/jack/turtlebot3_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'jack', '_': '/home/jack/.local/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm-256color', 'XDG_SESSION_ID': '203', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/home/jack/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'XDG_RUNTIME_DIR': '/run/user/1000', 'LANG': 'en_US.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'ROS_DOMAIN_ID': '54', 'AMENT_PREFIX_PATH': '/home/jack/f24_robotics_HW4/webots_ros2_homework1_python/install/webots_ros2_homework1_python:/home/jack/turtlebot3_ws/install/turtlebot3:/home/jack/turtlebot3_ws/install/turtlebot3_teleop:/home/jack/turtlebot3_ws/install/turtlebot3_bringup:/home/jack/turtlebot3_ws/install/turtlebot3_node:/home/jack/turtlebot3_ws/install/turtlebot3_navigation2:/home/jack/turtlebot3_ws/install/turtlebot3_example:/home/jack/turtlebot3_ws/install/turtlebot3_description:/home/jack/turtlebot3_ws/install/turtlebot3_cartographer:/home/jack/turtlebot3_ws/install/ld08_driver:/opt/ros/humble', 'SHELL': '/bin/bash', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'PWD': '/home/jack/f24_robotics_HW4/webots_ros2_homework1_python/build/webots_ros2_homework1_python', 'TURTLEBOT3_MODEL': 'burger', 'SSH_CONNECTION': '192.168.1.72 36877 192.168.1.38 22', 'XDG_DATA_DIRS': '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'LDS_MODEL': 'LDS_01', 'PYTHONPATH': '/home/jack/f24_robotics_HW4/webots_ros2_homework1_python/build/webots_ros2_homework1_python/prefix_override:/home/jack/.local/lib/python3.10/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/jack/f24_robotics_HW4/webots_ros2_homework1_python/install/webots_ros2_homework1_python/lib/python3.10/site-packages:/home/jack/f24_robotics_HW4/webots_ros2_homework1_python/install/webots_ros2_homework1_python/lib/python3.10/site-packages:/home/jack/turtlebot3_ws/install/turtlebot3_teleop/lib/python3.10/site-packages:/home/jack/turtlebot3_ws/install/turtlebot3_example/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/home/jack/turtlebot3_ws/install/turtlebot3:/home/jack/turtlebot3_ws/install/turtlebot3_bringup:/home/jack/turtlebot3_ws/install/turtlebot3_node:/home/jack/turtlebot3_ws/install/turtlebot3_navigation2:/home/jack/turtlebot3_ws/install/turtlebot3_description:/home/jack/turtlebot3_ws/install/turtlebot3_cartographer:/home/jack/turtlebot3_ws/install/ld08_driver'}, 'shell': False}
+[6.422748] (-) TimerEvent: {}
+[6.523781] (-) TimerEvent: {}
+[6.625353] (-) TimerEvent: {}
+[6.726768] (-) TimerEvent: {}
+[6.827974] (-) TimerEvent: {}
+[6.929190] (-) TimerEvent: {}
+[7.029927] (-) TimerEvent: {}
+[7.130699] (-) TimerEvent: {}
+[7.231962] (-) TimerEvent: {}
+[7.332874] (-) TimerEvent: {}
+[7.433922] (-) TimerEvent: {}
+[7.534744] (-) TimerEvent: {}
+[7.635685] (-) TimerEvent: {}
+[7.736708] (-) TimerEvent: {}
+[7.837845] (-) TimerEvent: {}
+[7.938691] (-) TimerEvent: {}
+[8.039561] (-) TimerEvent: {}
+[8.140315] (-) TimerEvent: {}
+[8.241144] (-) TimerEvent: {}
+[8.342144] (-) TimerEvent: {}
+[8.443345] (-) TimerEvent: {}
+[8.544154] (-) TimerEvent: {}
+[8.645102] (-) TimerEvent: {}
+[8.746014] (-) TimerEvent: {}
+[8.851307] (-) TimerEvent: {}
+[8.952475] (-) TimerEvent: {}
+[9.053397] (-) TimerEvent: {}
+[9.154128] (-) TimerEvent: {}
+[9.240577] (webots_ros2_homework1_python) StdoutLine: {'line': b'running egg_info\n'}
+[9.245621] (webots_ros2_homework1_python) StdoutLine: {'line': b'writing build/webots_ros2_homework1_python/webots_ros2_homework1_python.egg-info/PKG-INFO\n'}
+[9.248415] (webots_ros2_homework1_python) StdoutLine: {'line': b'writing dependency_links to build/webots_ros2_homework1_python/webots_ros2_homework1_python.egg-info/dependency_links.txt\n'}
+[9.252873] (webots_ros2_homework1_python) StdoutLine: {'line': b'writing entry points to build/webots_ros2_homework1_python/webots_ros2_homework1_python.egg-info/entry_points.txt\n'}
+[9.254332] (-) TimerEvent: {}
+[9.255199] (webots_ros2_homework1_python) StdoutLine: {'line': b'writing requirements to build/webots_ros2_homework1_python/webots_ros2_homework1_python.egg-info/requires.txt\n'}
+[9.256414] (webots_ros2_homework1_python) StdoutLine: {'line': b'writing top-level names to build/webots_ros2_homework1_python/webots_ros2_homework1_python.egg-info/top_level.txt\n'}
+[9.271813] (webots_ros2_homework1_python) StdoutLine: {'line': b"reading manifest file 'build/webots_ros2_homework1_python/webots_ros2_homework1_python.egg-info/SOURCES.txt'\n"}
+[9.277408] (webots_ros2_homework1_python) StdoutLine: {'line': b"writing manifest file 'build/webots_ros2_homework1_python/webots_ros2_homework1_python.egg-info/SOURCES.txt'\n"}
+[9.278221] (webots_ros2_homework1_python) StdoutLine: {'line': b'running build\n'}
+[9.278765] (webots_ros2_homework1_python) StdoutLine: {'line': b'running build_py\n'}
+[9.281151] (webots_ros2_homework1_python) StdoutLine: {'line': b'copying webots_ros2_homework1_python/webots_ros2_homework1_python.py -> /home/jack/f24_robotics_HW4/webots_ros2_homework1_python/build/webots_ros2_homework1_python/build/lib/webots_ros2_homework1_python\n'}
+[9.283212] (webots_ros2_homework1_python) StdoutLine: {'line': b'running install\n'}
+[9.293977] (webots_ros2_homework1_python) StdoutLine: {'line': b'running install_lib\n'}
+[9.305607] (webots_ros2_homework1_python) StdoutLine: {'line': b'copying /home/jack/f24_robotics_HW4/webots_ros2_homework1_python/build/webots_ros2_homework1_python/build/lib/webots_ros2_homework1_python/webots_ros2_homework1_python.py -> /home/jack/f24_robotics_HW4/webots_ros2_homework1_python/install/webots_ros2_homework1_python/lib/python3.10/site-packages/webots_ros2_homework1_python\n'}
+[9.306584] (webots_ros2_homework1_python) StdoutLine: {'line': b'byte-compiling /home/jack/f24_robotics_HW4/webots_ros2_homework1_python/install/webots_ros2_homework1_python/lib/python3.10/site-packages/webots_ros2_homework1_python/webots_ros2_homework1_python.py to webots_ros2_homework1_python.cpython-310.pyc\n'}
+[9.310247] (webots_ros2_homework1_python) StdoutLine: {'line': b'running install_data\n'}
+[9.316242] (webots_ros2_homework1_python) StdoutLine: {'line': b'running install_egg_info\n'}
+[9.329585] (webots_ros2_homework1_python) StdoutLine: {'line': b"removing '/home/jack/f24_robotics_HW4/webots_ros2_homework1_python/install/webots_ros2_homework1_python/lib/python3.10/site-packages/webots_ros2_homework1_python-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[9.331842] (webots_ros2_homework1_python) StdoutLine: {'line': b'Copying build/webots_ros2_homework1_python/webots_ros2_homework1_python.egg-info to /home/jack/f24_robotics_HW4/webots_ros2_homework1_python/install/webots_ros2_homework1_python/lib/python3.10/site-packages/webots_ros2_homework1_python-0.0.0-py3.10.egg-info\n'}
+[9.342032] (webots_ros2_homework1_python) StdoutLine: {'line': b'running install_scripts\n'}
+[9.356096] (-) TimerEvent: {}
+[9.443591] (webots_ros2_homework1_python) StdoutLine: {'line': b'Installing webots_ros2_homework1_python script to /home/jack/f24_robotics_HW4/webots_ros2_homework1_python/install/webots_ros2_homework1_python/lib/webots_ros2_homework1_python\n'}
+[9.445410] (webots_ros2_homework1_python) StdoutLine: {'line': b"writing list of installed files to '/home/jack/f24_robotics_HW4/webots_ros2_homework1_python/build/webots_ros2_homework1_python/install.log'\n"}
+[9.456657] (-) TimerEvent: {}
+[9.558827] (-) TimerEvent: {}
+[9.616998] (webots_ros2_homework1_python) CommandEnded: {'returncode': 0}
+[9.658976] (-) TimerEvent: {}
+[9.743082] (webots_ros2_homework1_python) JobEnded: {'identifier': 'webots_ros2_homework1_python', 'rc': 0}
+[9.752859] (-) EventReactorShutdown: {}

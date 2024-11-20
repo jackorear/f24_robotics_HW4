@@ -1,0 +1,6 @@
+[console_scripts]
+webots_ros2_homework1_python = webots_ros2_homework1_python.webots_ros2_homework1_python:main
+
+[launch.frontend.launch_extension]
+launch_ros = launch_ros
+
