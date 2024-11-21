@@ -91,4 +91,25 @@ def generate_launch_description():
             parameters=[tb3_param_dir],
             arguments=['-i', usb_port],
             output='screen'),
+        Node(
+            package='v4l2_camera',
+            executable='v4l2_camera_node',
+            name='v412_camera'),
+        Node(
+            package='apriltag_ros',
+            executable='apriltag_node',
+            name='apriltag',
+            output='screen',
+            remappings=[
+                ('image_rect','/image_raw'),
+                ('camera_info','/camera_info'),
+            ],
+            parameters=[
+                '/opt/ros/humble/share/apriltag_ros/cfg/tags_36h11.yaml'
+            ],),
+        Node(
+            package='webots_ros2_homework1_python',
+            executable='webots_ros2_homework1_python',
+            name='controller',
+        ),
     ])
