@@ -1,0 +1,31 @@
+running egg_info
+creating ../../build/webots_apriltags/webots_apriltags.egg-info
+writing ../../build/webots_apriltags/webots_apriltags.egg-info/PKG-INFO
+writing dependency_links to ../../build/webots_apriltags/webots_apriltags.egg-info/dependency_links.txt
+writing entry points to ../../build/webots_apriltags/webots_apriltags.egg-info/entry_points.txt
+writing requirements to ../../build/webots_apriltags/webots_apriltags.egg-info/requires.txt
+writing top-level names to ../../build/webots_apriltags/webots_apriltags.egg-info/top_level.txt
+writing manifest file '../../build/webots_apriltags/webots_apriltags.egg-info/SOURCES.txt'
+reading manifest file '../../build/webots_apriltags/webots_apriltags.egg-info/SOURCES.txt'
+writing manifest file '../../build/webots_apriltags/webots_apriltags.egg-info/SOURCES.txt'
+running build
+running install
+running install_data
+creating /home/jack/f24_robotics_HW4/webots_apriltags/install/webots_apriltags/share/ament_index
+creating /home/jack/f24_robotics_HW4/webots_apriltags/install/webots_apriltags/share/ament_index/resource_index
+creating /home/jack/f24_robotics_HW4/webots_apriltags/install/webots_apriltags/share/ament_index/resource_index/packages
+copying resource/webots_apriltags -> /home/jack/f24_robotics_HW4/webots_apriltags/install/webots_apriltags/share/ament_index/resource_index/packages
+creating /home/jack/f24_robotics_HW4/webots_apriltags/install/webots_apriltags/share/webots_apriltags/launch
+copying launch/webots_apriltags.launch.py -> /home/jack/f24_robotics_HW4/webots_apriltags/install/webots_apriltags/share/webots_apriltags/launch
+creating /home/jack/f24_robotics_HW4/webots_apriltags/install/webots_apriltags/share/webots_apriltags/worlds
+copying worlds/turtlebot3_apriltags.wbt -> /home/jack/f24_robotics_HW4/webots_apriltags/install/webots_apriltags/share/webots_apriltags/worlds
+copying package.xml -> /home/jack/f24_robotics_HW4/webots_apriltags/install/webots_apriltags/share/webots_apriltags
+creating /home/jack/f24_robotics_HW4/webots_apriltags/install/webots_apriltags/share/webots_apriltags/resource
+copying resource/turtlebot_webots.urdf -> /home/jack/f24_robotics_HW4/webots_apriltags/install/webots_apriltags/share/webots_apriltags/resource
+copying resource/ros2control.yml -> /home/jack/f24_robotics_HW4/webots_apriltags/install/webots_apriltags/share/webots_apriltags/resource
+creating /home/jack/f24_robotics_HW4/webots_apriltags/install/webots_apriltags/share/webots_apriltags/rviz
+copying rviz/turtlebot3_apriltags.rviz -> /home/jack/f24_robotics_HW4/webots_apriltags/install/webots_apriltags/share/webots_apriltags/rviz
+running install_egg_info
+Copying ../../build/webots_apriltags/webots_apriltags.egg-info to /home/jack/f24_robotics_HW4/webots_apriltags/install/webots_apriltags/lib/python3.10/site-packages/webots_apriltags-0.0.0-py3.10.egg-info
+running install_scripts
+writing list of installed files to '/home/jack/f24_robotics_HW4/webots_apriltags/build/webots_apriltags/install.log'

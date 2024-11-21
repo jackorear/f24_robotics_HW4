@@ -1,0 +1,16 @@
+package.xml
+setup.cfg
+setup.py
+../../build/webots_apriltags/webots_apriltags.egg-info/PKG-INFO
+../../build/webots_apriltags/webots_apriltags.egg-info/SOURCES.txt
+../../build/webots_apriltags/webots_apriltags.egg-info/dependency_links.txt
+../../build/webots_apriltags/webots_apriltags.egg-info/entry_points.txt
+../../build/webots_apriltags/webots_apriltags.egg-info/requires.txt
+../../build/webots_apriltags/webots_apriltags.egg-info/top_level.txt
+../../build/webots_apriltags/webots_apriltags.egg-info/zip-safe
+launch/webots_apriltags.launch.py
+resource/ros2control.yml
+resource/turtlebot_webots.urdf
+resource/webots_apriltags
+rviz/turtlebot3_apriltags.rviz
+worlds/turtlebot3_apriltags.wbt
