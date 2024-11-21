@@ -65,12 +65,12 @@ def generate_launch_description():
             package='apriltag_ros',
             executable='apriltag_node',
             name='apriltag',
-            remappings=[
-                ('image_rect','/image_raw'),
-                ('camera_info','/camera_info'),
+            ros_arguments=[
+                ('-r', 'image_rect:=/image_raw'),
+                ('-r', 'camera_info:=/camera_info'),
             ],
             parameters=[
-                ('params-file','`ros2 pkg prefix apriltag_ros`/share/apriltag_ros/cfg/tags_36h11.yaml'),
+                ('/opt/ros/humble/share/apriltag_ros/cfg/tags_36h11.yaml'),
             ]
             ),
         Node(
