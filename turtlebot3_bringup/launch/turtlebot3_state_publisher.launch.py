@@ -45,7 +45,7 @@ def generate_launch_description():
 
     rsp_params = {'robot_description': robot_desc}
 
-    # print (robot_desc) # Printing urdf information.
+    # print (robot_desc) # Printing urdf information. f
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -70,8 +70,9 @@ def generate_launch_description():
                 ('camera_info','/camera_info'),
             ],
             parameters=[
-                ('params-file':'`ros2 pkg prefix apriltag_ros`/share/apriltag_ros/cfg/tags_36h11.yaml'),
-            ]),
+                ('params-file','`ros2 pkg prefix apriltag_ros`/share/apriltag_ros/cfg/tags_36h11.yaml'),
+            ]
+            ),
         Node(
             package='webots_ros2_homework1_python',
             executable='webots_ros2_homework1_python',
