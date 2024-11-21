@@ -39,7 +39,7 @@ def generate_launch_description():
         urdf_file_name)
 
     # Major refactor of the robot_state_publisher
-    # Reference page: https://github.com/ros2/demos/pull/426
+    # Reference page: https://github.com/ros2/demos/pull/426 j
     with open(urdf, 'r') as infp:
         robot_desc = infp.read()
 
@@ -56,5 +56,26 @@ def generate_launch_description():
             package='robot_state_publisher',
             executable='robot_state_publisher',
             output='screen',
-            parameters=[rsp_params, {'use_sim_time': use_sim_time}])
+            parameters=[rsp_params, {'use_sim_time': use_sim_time}]),
+        Node(
+            package='v4l2_camera',
+            executable='v4l2_camera_node',
+            name='v412_camera'),
+        Node(
+            package='apriltag_ros',
+            executable='apriltag_node',
+            name='apriltag',
+            output='screen',
+            remappings=[
+                ('image_rect','/image_raw'),
+                ('camera_info','/camera_info'),
+            ],
+            parameters=[
+                '/opt/ros/humble/share/apriltag_ros/cfg/tags_36h11.yaml'
+            ],),
+        Node(
+            package='webots_ros2_homework1_python',
+            executable='webots_ros2_homework1_python',
+            name='controller',
+        ),
     ])
