@@ -45,6 +45,9 @@ def generate_launch_description():
 
     rsp_params = {'robot_description': robot_desc}
 
+    apriltag_params = os.path.join(get_package_share_directory('apriltag_ros'),
+                                   'cfg','tags_36h11.yaml')
+
     # print (robot_desc) # Printing urdf information. f
 
     return LaunchDescription([
@@ -64,18 +67,18 @@ def generate_launch_description():
         Node(
             package='apriltag_ros',
             executable='apriltag_node',
-            name='apriltag',
+            name='apriltag_node',
+            output='screen',
             ros_arguments=[
                 ('-r', 'image_rect:=/image_raw'),
                 ('-r', 'camera_info:=/camera_info'),
             ],
-            parameters=[
-                ('/opt/ros/humble/share/apriltag_ros/cfg/tags_36h11.yaml'),
-            ]
+            parameters=[apriltag_params],
             ),
         Node(
             package='webots_ros2_homework1_python',
             executable='webots_ros2_homework1_python',
-            name='controller',
+            name='webots_ros2_homework1_python',
+            output='screen',
         ),
     ])
